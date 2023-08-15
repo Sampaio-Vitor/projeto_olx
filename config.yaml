@@ -1,0 +1,4 @@
+scraper:
+  start_url: "https://www.olx.com.br/imoveis/venda/apartamentos/estado-mg/belo-horizonte-e-regiao"
+  csv_filename: "links_olx.csv"
+  sleep_time: 3
