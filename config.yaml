@@ -6,7 +6,7 @@ scraper:
       url: "https://www.olx.com.br/imoveis/venda/apartamentos/estado-mg/belo-horizonte-e-regiao/pampulha?sf=1"
     - name: "venda_nova"
       url: "https://www.olx.com.br/imoveis/venda/apartamentos/estado-mg/belo-horizonte-e-regiao/venda-nova?sf=1"
-    - name: "centro_sul"
+    - name: "zona_centro_sul"
       url: "https://www.olx.com.br/imoveis/venda/apartamentos/estado-mg/belo-horizonte-e-regiao/zona-centro-sul?sf=1"
     - name: "zona_leste"
       url: "https://www.olx.com.br/imoveis/venda/apartamentos/estado-mg/belo-horizonte-e-regiao/zona-leste?sf=1"
