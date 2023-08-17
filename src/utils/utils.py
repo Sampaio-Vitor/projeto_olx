@@ -3,7 +3,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 import yaml
 import joblib
-
+from sklearn.metrics import mean_squared_error, mean_absolute_error
 
 def load_config(config_path):
     """
@@ -24,23 +24,40 @@ def load_config(config_path):
 # Atualizando a função para tratar valores inadequados antes da transformação
 def transform_currency_column_final(data, column_name):
     data_copy = data.copy()
+    
+    # Ensure the column exists
+    if column_name not in data_copy.columns:
+        print(f"{column_name} column does not exist in the provided data.")
+        return data_copy
 
-    # Substituindo "." e depois substituindo "," por "."
+    # Convert the entire column to string type before applying string operations
+    data_copy[column_name] = data_copy[column_name].astype(str)
+
+    # Then perform the string replacements
     data_copy[column_name] = data_copy[column_name].str.replace('R$ ', '', regex=False)
     data_copy[column_name] = data_copy[column_name].str.replace('.', '', regex=False).str.replace(',', '.', regex=False)
 
-    # Convertendo para numérico e substituindo valores inválidos por NaN
+    # Convert to numeric
     data_copy[column_name] = pd.to_numeric(data_copy[column_name], errors='coerce')
 
     return data_copy
-
 # Atualizando a função para tratar valores inadequados na coluna AREA
 def transform_area_column_updated(data):
     data_copy = data.copy()
+    
+    # Ensure the 'AREA' column exists
+    if 'AREA' not in data_copy.columns:
+        print("AREA column does not exist in the provided data.")
+        return data_copy
 
-    # Removendo "m²" e tentando converter para int
+    # Convert the entire 'AREA' column to string type before applying string operations
+    data_copy['AREA'] = data_copy['AREA'].astype(str)
+
+    # Then perform the string replacements
     data_copy['AREA'] = data_copy['AREA'].str.replace('m²', '', regex=False)
-    data_copy['AREA'] = pd.to_numeric(data_copy['AREA'], errors='coerce', downcast='integer')
+
+    # Convert to numeric
+    data_copy['AREA'] = pd.to_numeric(data_copy['AREA'], errors='coerce')
 
     return data_copy
 
@@ -204,21 +221,10 @@ def split_data(data, test_size=0.2, random_state=42):
     return train_data, test_data
 
 
-def select_features_and_target(data, features, target):
-    """
-    Retorna um dataframe contendo apenas as colunas especificadas em 'features' e 'target'.
-
-    Args:
-    - data (pd.DataFrame): dataframe de entrada.
-    - features (list of str): lista das colunas de características.
-    - target (list of str): lista contendo a coluna alvo.
-
-    Returns:
-    - pd.DataFrame: dataframe contendo apenas as colunas especificadas.
-    """
-    
-    selected_columns = features + target
-    return data[selected_columns]
+def select_features_and_target(data, features_columns, target):
+    X = data[features_columns]  # todas as colunas exceto 'LOG_PRICE'
+    y = data['LOG_PRICE']
+    return X, y
 
 def train_model(X, y, regressor):
     """
@@ -261,7 +267,7 @@ def evaluate_model(model, X, y):
     
     return rmse, mae
     
-def score_new_data(new_data, model, pipeline):
+def score_new_data(new_data, model, pipeline, features_predict):
     """
     Pontua novos dados usando o modelo treinado e o pipeline de transformação.
 
@@ -269,26 +275,38 @@ def score_new_data(new_data, model, pipeline):
     - new_data (pd.DataFrame): Novos dados para pontuar.
     - model (estimator): Modelo treinado.
     - pipeline (Pipeline): Pipeline de transformação.
+    - features_predict (list): List of features to use for prediction.
 
     Returns:
-    - scored_data (pd.DataFrame): DataFrame com previsões do modelo e dados transformados.
+    - scored_data (pd.DataFrame): DataFrame with model predictions and transformed data.
     """
-    # Transformar os dados
+    # Transform the data
     transformed_data = pipeline.transform(new_data)
     
-    # Salvar uma cópia dos dados transformados
+    # Save a copy of the transformed data
     transformed_copy = transformed_data.copy()
     
-    # Selecionar apenas as características desejadas
+    # Select only the desired features
     transformed_data = transformed_data[features_predict]
     
-    # Fazer previsões
+    # Make predictions
     predictions = model.predict(transformed_data)
     
-    # Criar uma cópia do DataFrame original com uma nova coluna "predictions"
+    # Create a copy of the original DataFrame with a new "predictions" column
     transformed_copy["predictions"] = np.exp(predictions) - 1
         
     return transformed_copy
+
+def fill_avg_price_per_sqmt(new_data, avg_price_dict):
+    # Assumindo que sua coluna de bairro nos novos dados também é chamada de "REGION"
+    new_data['LOG_AVG_PRICE_PER_SQMT_BY_REGION'] = new_data['REGION'].map(avg_price_dict)
+    return new_data
+
+def apply_log_area (data):
+    data_copy = data.copy()
+    data_copy['LOG_AREA'] = np.log1p(data_copy['AREA'])
+    return data_copy
+
 
 def fill_avg_price_per_sqmt(new_data, avg_price_dict):
     # Assumindo que sua coluna de bairro nos novos dados também é chamada de "REGION"
@@ -310,3 +328,48 @@ def save_model(model, filename="best_model.pkl"):
     """
     joblib.dump(model, filename)
     print(f"Model saved as {filename}")
+
+# Loading data from CSV
+def load_data(filepath):
+    return pd.read_csv(filepath)
+
+def calculate_mape(y_true, y_pred):
+    errors = np.abs((y_true - y_pred) / y_true)
+    mape = np.mean(errors) * 100
+    return mape
+
+def drop_non_string_rows_multi_columns(data, column_names):
+    """
+    Drop rows from a DataFrame where values in specific columns are not of string type.
+
+    Args:
+    - data (pd.DataFrame): The input DataFrame.
+    - column_names (list): The list of columns in which to check for non-string values.
+
+    Returns:
+    - pd.DataFrame: A DataFrame with rows dropped where the specified columns had non-string values.
+    """
+    mask = np.all([data[column].apply(lambda x: isinstance(x, str)) for column in column_names], axis=0)
+    return data[mask]
+
+import pandas as pd
+
+def transform_string_currency_column_final(data, column_name):
+    data_copy = data.copy()
+    
+    # Ensure the column exists
+    if column_name not in data_copy.columns:
+        print(f"{column_name} column does not exist in the provided data.")
+        return data_copy
+
+    # Convert the entire column to string type before applying string operations
+    data_copy[column_name] = data_copy[column_name].astype(str)
+
+    # Then perform the string replacements
+    data_copy[column_name] = data_copy[column_name].str.replace('R$ ', '', regex=False)
+    data_copy[column_name] = data_copy[column_name].str.replace('.', '', regex=False).str.replace(',', '.', regex=False)
+
+    # Convert to numeric
+    data_copy[column_name] = pd.to_numeric(data_copy[column_name], errors='coerce')
+
+    return data_copy

@@ -1,9 +1,7 @@
-
 # 1. Necessary package imports
 import pandas as pd
 from sklearn.pipeline import Pipeline, FunctionTransformer
 import numpy as np
-from sklearn.model_selection import train_test_split
 
 # 2. Importing utility functions
 from utils.utils import (
@@ -32,6 +30,7 @@ from utils.utils import (
     apply_log_transformations,
     create_utils_column,
     drop_non_log_columns,
+    load_data
 )
 
 # 3. Setting up the transformation pipeline
@@ -60,3 +59,13 @@ final_transformation_pipeline = Pipeline(steps=[
     ('create_utils', FunctionTransformer(func=create_utils_column, validate=False)),
     ('drop_non_log', FunctionTransformer(func=drop_non_log_columns, validate=False)),
 ])
+
+if __name__ == "__main__":
+    # Load the data
+    data = load_data("data/train_data/final_dataframe.csv")
+    
+    # Apply transformations using the pipeline
+    transformed_data = final_transformation_pipeline.transform(data)
+    
+    # Save the processed data
+    transformed_data.to_csv("data/processed_data.csv", index=False)

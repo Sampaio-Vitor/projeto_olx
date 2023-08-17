@@ -67,3 +67,32 @@ model:
     - "UTILS"
   target:
     - "LOG_PRICE"
+    
+score_new_pred:
+  features:
+    - ROOMS_NO
+    - BATH_NO
+    - PARKING_SPOTS
+    - DETAIL_Academia
+    - DETAIL_Ar condicionado
+    - DETAIL_Armários na cozinha
+    - DETAIL_Armários no quarto
+    - DETAIL_Churrasqueira
+    - DETAIL_Mobiliado
+    - DETAIL_Piscina
+    - DETAIL_Varanda
+    - DETAIL_Área de serviço
+    - REGION_barreiro
+    - REGION_pampulha
+    - REGION_venda nova
+    - REGION_centro sul
+    - REGION_zona leste
+    - REGION_zona nordeste
+    - REGION_zona noroeste
+    - REGION_zona norte
+    - REGION_zona oeste
+    - LOG_AREA
+    - LOG_AVG_PRICE_PER_SQMT_BY_REGION
+    - UTILS
+  target:
+    - LOG_PRICE
