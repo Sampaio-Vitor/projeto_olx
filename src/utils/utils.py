@@ -200,7 +200,7 @@ def apply_log_transformations(data):
     data_copy = data.copy()
     data_copy['LOG_AREA'] = np.log1p(data_copy['AREA'])
     data_copy['LOG_PRICE'] = np.log1p(data_copy['PRICE'])
-    data_copy['LOG_AVG_PRICE_PER_SQMT_BY_REGION'] = np.log1p(data_copy['AVG_PRICE_PER_SQMT_BY_REGION'])
+    data_copy['LOG_AVG_PRICE_PER_SQMT_BY_REGION'] = np.log1p(data_copy['LOG_AVG_PRICE_PER_SQMT_BY_REGION'])
     return data_copy
 
 # Function to create the UTILS column by adding TAX and CONDO columns
@@ -241,31 +241,48 @@ def train_model(X, y, regressor):
     regressor.fit(X, y)
     return regressor
 
+def mean_absolute_percentage_error(y_true, y_pred):
+    """
+    Calculate Mean Absolute Percentage Error
+    """
+    # Ensure arrays
+    y_true, y_pred = np.array(y_true), np.array(y_pred)
+    
+    # Avoid division by zero
+    non_zero_indices = y_true != 0  
+    
+    return np.mean(np.abs((y_true[non_zero_indices] - y_pred[non_zero_indices]) / y_true[non_zero_indices])) * 100
+
+def log_to_linear(values):
+    return np.expm1(values)
+
 def evaluate_model(model, X, y):
     """
-    Avalia o modelo utilizando o RMSE e o MAE.
-
-    Args:
-    - model (estimator): modelo treinado.
-    - X (pd.DataFrame): dataframe de características.
-    - y (pd.Series): série alvo.
-
-    Returns:
-    - rmse (float): Root Mean Squared Error.
-    - mae (float): Mean Absolute Error.
+    Evaluate the model using RMSE, MAE, and MAPE.
     """
     predictions = model.predict(X)
     
-    # Calcular o RMSE
-    rmse = np.sqrt(mean_squared_error(y, predictions))
+    # Calculate RMSE and MAE in log scale
+    rmse_log = np.sqrt(mean_squared_error(y, predictions))
+    mae_log = mean_absolute_error(y, predictions)
     
-    # Calcular o MAE
-    mae = mean_absolute_error(y, predictions)
+    print("Log Scale:")
+    print(f"RMSE: {rmse_log}")
+    print(f"MAE: {mae_log}")
 
-    print(f"RMSE: {rmse}")
-    print(f"MAE: {mae}")
+    # Convert predictions and true target values to linear scale
+    predictions_linear = log_to_linear(predictions)
+    y_true_linear = log_to_linear(y)
+
+    # Calculate MAPE on the linear scale
+    mape_linear = mean_absolute_percentage_error(y_true_linear, predictions_linear)
+
+    print("\nLinear Scale:")
+    print(f"MAPE: {mape_linear}%")
     
-    return rmse, mae
+    return rmse_log, mae_log, mape_linear
+
+
     
 def score_new_data(new_data, model, pipeline, features_predict):
     """

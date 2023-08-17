@@ -6,13 +6,13 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error, mean_absolu
 import yaml
 import joblib
 from sklearn.model_selection import train_test_split
-from utils.utils import load_config, save_model, load_data, evaluate_model
+from src.utils.utils import load_config, save_model, load_data, evaluate_model
 import matplotlib.pyplot as plt
 
 
 
 # Import necessary functions from utils
-from utils.utils import select_features_and_target, train_model, load_config, save_model, load_data, evaluate_model
+from src.utils.utils import select_features_and_target, train_model, load_config, save_model, load_data, evaluate_model
 
 
 
@@ -49,16 +49,12 @@ if __name__ == "__main__":
     # Save the trained model
     save_model(trained_pipeline, "models/best_model.pkl")  # Save the entire pipeline
 
-    # Evaluate the model
-    predictions = trained_pipeline.predict(X_test)
-    
-
-    
-     # Evaluate the model
+    # Evaluate the model in log scale
+    print("Evaluating in log scale:")
     evaluate_model(trained_pipeline, X_test, y_test)
-
-         # Convert predictions and true target values to linear scale
-    predictions_linear = np.exp(predictions)
+    
+    # Convert predictions and true target values to linear scale
+    predictions_linear = np.exp(trained_pipeline.predict(X_test))
     y_test_linear = np.exp(y_test)
 
     # Plotting
@@ -69,6 +65,4 @@ if __name__ == "__main__":
     plt.xlabel("True Values")
     plt.ylabel("Predicted Values")
     plt.show()
-
-    # Evaluate the model
-    evaluate_model(trained_pipeline, X_test, y_test)
+    plt.savefig('meu_grafico.png')

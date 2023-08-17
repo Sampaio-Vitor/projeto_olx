@@ -4,19 +4,19 @@ scraper:
       url: "https://www.olx.com.br/imoveis/venda/apartamentos/estado-mg/belo-horizonte-e-regiao/barreiro?sf=1"
     - name: "pampulha"
       url: "https://www.olx.com.br/imoveis/venda/apartamentos/estado-mg/belo-horizonte-e-regiao/pampulha?sf=1"
-    - name: "venda nova"
+    - name: "venda_nova"
       url: "https://www.olx.com.br/imoveis/venda/apartamentos/estado-mg/belo-horizonte-e-regiao/venda-nova?sf=1"
-    - name: "centro sul"
+    - name: "centro_sul"
       url: "https://www.olx.com.br/imoveis/venda/apartamentos/estado-mg/belo-horizonte-e-regiao/zona-centro-sul?sf=1"
-    - name: "zona leste"
+    - name: "zona_leste"
       url: "https://www.olx.com.br/imoveis/venda/apartamentos/estado-mg/belo-horizonte-e-regiao/zona-leste?sf=1"
-    - name: "zona nordeste"
+    - name: "zona_nordeste"
       url: "https://www.olx.com.br/imoveis/venda/apartamentos/estado-mg/belo-horizonte-e-regiao/zona-nordeste?sf=1"
-    - name: "zona noroeste"
+    - name: "zona_noroeste"
       url: "https://www.olx.com.br/imoveis/venda/apartamentos/estado-mg/belo-horizonte-e-regiao/zona-noroeste?sf=1"
-    - name: "zona norte"
+    - name: "zona_norte"
       url: "https://www.olx.com.br/imoveis/venda/apartamentos/estado-mg/belo-horizonte-e-regiao/zona-norte?sf=1"
-    - name: "zona oeste"
+    - name: "zona_oeste"
       url: "https://www.olx.com.br/imoveis/venda/apartamentos/estado-mg/belo-horizonte-e-regiao/zona-oeste?sf=1"
   csv_filename: "data/new_links_olx.csv"
   sleep_time: 3
@@ -31,7 +31,7 @@ model:
     - 2
   avg_price_per_sqmt_dict:
     zona_norte: 8.394846992222611
-    centro_sul: 9.09851811665617
+    zona_centro_sul: 9.09851811665617
     barreiro: 8.503898358767296
     venda_nova: 8.36755862148199
     zona_oeste: 8.843083032977592
@@ -55,13 +55,12 @@ model:
     - "DETAIL_Área de serviço"
     - "REGION_barreiro"
     - "REGION_pampulha"
-    - "REGION_venda nova"
-    - "REGION_centro sul"
-    - "REGION_zona leste"
-    - "REGION_zona nordeste"
-    - "REGION_zona noroeste"
-    - "REGION_zona norte"
-    - "REGION_zona oeste"
+    - "REGION_venda_nova"
+    - "REGION_zona_leste"
+    - "REGION_zona_nordeste"
+    - "REGION_zona_noroeste"
+    - "REGION_zona_norte"
+    - "REGION_zona_oeste"
     - "LOG_AREA"
     - "LOG_AVG_PRICE_PER_SQMT_BY_REGION"
     - "UTILS"
