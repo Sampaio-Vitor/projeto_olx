@@ -21,7 +21,7 @@ class DataScraper:
         self.detailed_filename = os.path.join('data', config['scraper']['detailed_filename'])
         self.sleep_time = config['scraper']['sleep_time']
         self.options = Options()
-        self.options.add_argument("--start-maximized")
+        self.options.add_argument("--headless")
         self.options.add_argument('--ignore-certificate-errors')
         self.options.add_argument('--ignore-ssl-errors')
         self.options.add_experimental_option('excludeSwitches', ['enable-logging'])
