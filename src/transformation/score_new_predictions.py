@@ -1,7 +1,10 @@
 import pandas as pd
 from joblib import load
-from src.utils.utils import load_config
+from utils.utils import load_config
 import numpy as np
+
+
+
 
 config = load_config("config.yaml")
 features_predict  = config['model']['features']

@@ -4,6 +4,12 @@ from sklearn.model_selection import train_test_split
 import yaml
 import joblib
 from sklearn.metrics import mean_squared_error, mean_absolute_error
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import re
+from selenium.common.exceptions import NoSuchElementException
+
 
 def load_config(config_path):
     """
@@ -390,3 +396,166 @@ def transform_string_currency_column_final(data, column_name):
     data_copy[column_name] = pd.to_numeric(data_copy[column_name], errors='coerce')
 
     return data_copy
+
+
+######### FUNCTIONS FOR WEBSCRAPING #####################
+
+def extract_cep(driver):
+    try:
+        # Wait for the element with text 'CEP' to be present
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[text()='CEP']")))
+        
+        # Then find the element
+        cep_label = driver.find_element(By.XPATH, "//*[text()='CEP']")
+
+        # Navigate to the subsequent sibling to get the CEP value
+        cep_value = cep_label.find_element(By.XPATH, "following-sibling::span").text
+        return cep_value
+    except Exception as e:
+        return np.nan
+
+def extract_neighborhood(driver):
+    try:
+        # Wait for the element with text 'Bairro' to be present
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[text()='Bairro']")))
+        
+        # Then find the element
+        neighborhood_label = driver.find_element(By.XPATH, "//*[text()='Bairro']")
+        
+        # Navigate to the subsequent sibling to get the neighborhood value
+        neighborhood_value = neighborhood_label.find_element(By.XPATH, "following-sibling::span").text
+        return neighborhood_value
+    except Exception as e:
+        return np.nan
+    
+def extract_condo(driver):
+    try:
+        # Wait for the element with text 'Condomínio' to be present
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[text()='Condomínio']")))
+        
+        # Then find the element
+        condo_label = driver.find_element(By.XPATH, "//*[text()='Condomínio']")
+        
+        # Navigate to the subsequent sibling to get the condo value
+        condo_value = condo_label.find_element(By.XPATH, "following-sibling::span").text
+        return condo_value
+    except Exception as e:
+        return np.nan
+
+def extract_tax(driver):
+    try:
+        # Wait for the element with text 'IPTU' to be present
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[text()='IPTU']")))
+        
+        # Then find the element
+        tax_label = driver.find_element(By.XPATH, "//*[text()='IPTU']")
+        
+        # Navigate to the subsequent sibling to get the tax value
+        tax_value = tax_label.find_element(By.XPATH, "following-sibling::span").text
+        return tax_value
+    except Exception as e:
+        return np.nan
+    
+def extract_area(driver):
+    try:
+        # Wait for the element with text 'Área útil' to be present
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[text()='Área útil']")))
+        
+        # Then find the element
+        area_label = driver.find_element(By.XPATH, "//*[text()='Área útil']")
+        
+        # Navigate to the subsequent sibling to get the area value
+        area_value = area_label.find_element(By.XPATH, "following-sibling::span").text
+        return area_value
+    except Exception as e:
+        return np.nan
+
+def extract_rooms(driver):
+    try:
+        # Wait for the element with text 'Quartos' to be present
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[text()='Quartos']")))
+        
+        # Then find the element
+        rooms_label = driver.find_element(By.XPATH, "//*[text()='Quartos']")
+        
+        # Navigate to the subsequent div to get the rooms value
+        rooms_value = rooms_label.find_element(By.XPATH, "following-sibling::div/a").text
+        return rooms_value
+    except Exception as e:
+        return np.nan
+
+def extract_baths(driver):
+    try:
+        # Wait for the element with text 'Banheiros' to be present
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[text()='Banheiros']")))
+        
+        # Then find the element
+        baths_label = driver.find_element(By.XPATH, "//*[text()='Banheiros']")
+        
+        # Navigate to the subsequent sibling to get the bath number value
+        baths_value = baths_label.find_element(By.XPATH, "following-sibling::span").text
+        return baths_value
+    except Exception as e:
+        return np.nan
+
+def extract_parking_spots(driver):
+    try:
+        # Wait for the element with text 'Vagas na garagem' to be present
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[text()='Vagas na garagem']")))
+        
+        # Then find the element
+        parking_label = driver.find_element(By.XPATH, "//*[text()='Vagas na garagem']")
+        
+        # Navigate to the subsequent sibling to get the parking spots value
+        parking_value = parking_label.find_element(By.XPATH, "following-sibling::span").text
+        return parking_value
+    except Exception as e:
+        return np.nan
+
+def extract_apartment_details(driver):
+    try:
+        # Wait for the element with text 'Detalhes do imóvel' to be present
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//*[text()='Detalhes do imóvel']")))
+        
+        # Then find the element
+        details_label = driver.find_element(By.XPATH, "//*[text()='Detalhes do imóvel']")
+        
+        # Navigate to the subsequent sibling to get the apartment details
+        details_value = details_label.find_element(By.XPATH, "following-sibling::span").text
+        return details_value
+    except Exception as e:
+        return ""
+
+
+def find_content_by_regex(driver, pattern):
+    page_source = driver.page_source
+    matches = re.findall(pattern, page_source)
+    return matches
+
+
+def page_not_found(driver):
+    try:
+        not_found_element = driver.find_element(By.XPATH, "//span[text()='A página não foi encontrada...']")
+        if not_found_element:
+            return True
+    except NoSuchElementException:
+        return False
+    return False
+    
+def extract_price_using_xpath(driver):
+    try:
+        price_element = driver.find_element(By.XPATH, '//*[@id="content"]/div[2]/div/div[2]/div[1]/div[3]/div/div/div[2]/div[1]/div[1]/div/div[1]/span')
+        price_text = price_element.text
+        # Remove unwanted characters and return as an integer
+        cleaned_price = int(price_text.replace("R$", "").replace(".", "").strip())
+        return cleaned_price
+    except NoSuchElementException:
+        return None
+
+def extract_title_using_xpath(driver):
+    try:
+        title_element = driver.find_element(By.XPATH, '//*[@id="content"]/div[2]/div/div[2]/div[1]/div[6]/div/div/h1')
+        title_text = title_element.text
+        return title_text
+    except NoSuchElementException:
+        return None
