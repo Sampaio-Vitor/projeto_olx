@@ -17,7 +17,7 @@ class LinkScraper:
         self.csv_filename = config['scraper']['csv_filename']
         self.sleep_time = config['scraper']['sleep_time']
         self.options = Options()
-        self.options.add_argument("--headless")
+        #self.options.add_argument("--headless")
         self.options.add_argument('--ignore-certificate-errors')
         self.options.add_argument('--ignore-ssl-errors')
         self.options.add_experimental_option('excludeSwitches', ['enable-logging'])
@@ -26,26 +26,30 @@ class LinkScraper:
         
     def fetch_data_from_page(self, url):
         self.driver.get(url)
-        WebDriverWait(self.driver, 30).until(EC.presence_of_element_located((By.CSS_SELECTOR, 'h2[class="horizontal title sc-ifAKCX hUnWqk"]')))
+        WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, 'body')))
         soup = BeautifulSoup(self.driver.page_source, 'html.parser')
-
-        links = soup.find_all('a', attrs={'data-ds-component': 'DS-NewAdCard-Link'})
-        dates = soup.find_all('p', attrs={'data-ds-component': 'DS-Text', 'data-testid': 'ds-adcard-date'})
 
         data = []
 
-        # Coletar todos os anúncios da página
-        for link, date in zip(links, dates):
-            if "Hoje" in date.text and link['href'] not in self.seen_links:
-                self.seen_links.add(link['href'])  # Adicione o link ao conjunto de links vistos
-                row = {
-                    'link': link['href'],
-                    'date': datetime.now()
-                }
-                data.append(row)
+        try:
+            links_elements = self.driver.find_elements(By.XPATH, '//*[@id="main-content"]/div[16]/section/a')
+            links = [link_elem.get_attribute('href') for link_elem in links_elements]
 
+            dates_elements = self.driver.find_elements(By.XPATH, '//*[@id="main-content"]/div[15]/section/div[2]/div[2]/div/div[2]/p[2]')
+            dates = [date_elem.text for date_elem in dates_elements]
 
-        # Ignorar os 4 primeiros anúncios impulsionados
+            for link, date in zip(links, dates):
+                print(f"Found link: {link} with date: {date}")  # Debug print
+                if "Hoje" in date and link not in self.seen_links:
+                    self.seen_links.add(link)
+                    row = {
+                        'link': link,
+                        'date': datetime.now()
+                    }
+                    data.append(row)
+        except Exception as e:
+            print(f"Error while scraping page {url}: {e}")
+
         return data[4:]
 
     def save_to_csv(self, data, region, mode='w'):
@@ -58,6 +62,7 @@ class LinkScraper:
             page = 1
             region_name = region['name']
             base_url = region['url']
+            
             while True:
                 if page == 1:
                     url = base_url
@@ -66,7 +71,7 @@ class LinkScraper:
 
                 new_data = self.fetch_data_from_page(url)
                 
-                if not new_data:  # Break if we find an ad with "Ontem" or the page doesn't contain more data
+                if not new_data:
                     break
 
                 print(f"Scraping region: {region_name} - Page number: {page}")
@@ -76,9 +81,8 @@ class LinkScraper:
                 self.save_to_csv(new_data, region_name, mode='a')
 
                 page += 1
-                time.sleep(self.sleep_time)  # Pause for a few seconds between requests
-
-        self.driver.quit()
+                time.sleep(self.sleep_time)
+                print(f"{len(new_data)} links found on this page.")
 
 if __name__ == "__main__":
     with open("config.yaml", "r", encoding="utf-8") as f:

@@ -3,6 +3,51 @@ import pandas as pd
 from sklearn.pipeline import Pipeline, FunctionTransformer
 import numpy as np
 from joblib import dump
+import sys
+sys.path.append("C:/Users/vitor/OneDrive/Área de Trabalho/projetos/projeto_olx/")
+
+expected_columns = [
+    "TITLE",
+    "LINK",
+    "DATE_SCRAPE",
+    "CITY",
+    "CEP",
+    "NEIGHBORHOOD",
+    "CONDO",
+    "TAX",
+    "AREA",
+    "ROOMS_NO",
+    "BATH_NO",
+    "PARKING_SPOTS",
+    "APARTMENT_DETAILS",
+    "PRICE",
+    "REGION",
+    "REGIONS",
+    "DETAIL_Academia",
+    "DETAIL_Ar condicionado",
+    "DETAIL_Armários na cozinha",
+    "DETAIL_Armários no quarto",
+    "DETAIL_Churrasqueira",
+    "DETAIL_Mobiliado",
+    "DETAIL_Piscina",
+    "DETAIL_Quarto de serviço",
+    "DETAIL_Varanda",
+    "DETAIL_Área de serviço",
+    "LOG_AVG_PRICE_PER_SQMT_BY_REGION",
+    "REGION_barreiro",
+    "REGION_pampulha",
+    "REGION_venda_nova",
+    "REGION_zona_centro_sul",
+    "REGION_zona_leste",
+    "REGION_zona_nordeste",
+    "REGION_zona_noroeste",
+    "REGION_zona_norte",
+    "REGION_zona_oeste",
+    "LOG_AREA",
+    "LOG_PRICE",
+    "UTILS"
+]
+
 
 
 # 2. Importing utility functions
@@ -33,14 +78,17 @@ from src.utils.utils import (
     create_utils_column,
     drop_non_log_columns,
     load_data,
-    load_config
+    load_config,
+    EnsureColumnsTransformer,
+    ColumnOrderEnsurer,
+    DropDuplicateColumns
 )
 config = load_config("config.yaml")
 avg_price_dict = config['model']['avg_price_per_sqmt_dict']
 
 # 3. Setting up the transformation pipeline
 final_transformation_pipeline = Pipeline(steps=[
-
+    ('ensure_columns', EnsureColumnsTransformer(expected_columns)),
     ('transform_condo', FunctionTransformer(func=transform_condo_column_final, validate=False)),
     ('transform_tax', FunctionTransformer(func=transform_tax_column_final, validate=False)),
     ('replace_nan', FunctionTransformer(func=replace_nan_in_condo_and_tax, validate=False)),
@@ -65,6 +113,8 @@ final_transformation_pipeline = Pipeline(steps=[
     ('log_transformations', FunctionTransformer(func=apply_log_transformations, validate=False)),
     ('create_utils', FunctionTransformer(func=create_utils_column, validate=False)),
     #('drop_non_log', FunctionTransformer(func=drop_non_log_columns, validate=False)),
+    ('drop_duplicates', DropDuplicateColumns()),
+    ('column_order_ensurer', ColumnOrderEnsurer(expected_columns=expected_columns)),
 ])
 
 if __name__ == "__main__":

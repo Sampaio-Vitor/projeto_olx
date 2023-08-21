@@ -9,6 +9,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import re
 from selenium.common.exceptions import NoSuchElementException
+from sklearn.base import TransformerMixin, BaseEstimator
+
 
 
 def load_config(config_path):
@@ -398,6 +400,48 @@ def transform_string_currency_column_final(data, column_name):
     return data_copy
 
 
+class EnsureColumnsTransformer(BaseEstimator, TransformerMixin):
+    def __init__(self, expected_columns):
+        self.expected_columns = expected_columns
+
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        for col in self.expected_columns:
+            if col not in X.columns:
+                X[col] = 0
+        # Ensure the order of column in the test set is in the same order as in the train set
+        return X[self.expected_columns]
+    
+    
+class ColumnOrderEnsurer(BaseEstimator, TransformerMixin):
+    def __init__(self, expected_columns):
+        self.expected_columns = expected_columns
+
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        # Add missing columns and fill with 0
+        for column in self.expected_columns:
+            if column not in X.columns:
+                X[column] = 0
+
+        # Reorder the columns according to expected_columns
+        X = X[self.expected_columns]
+        
+        return X
+
+class DropDuplicateColumns(BaseEstimator, TransformerMixin):
+    def fit(self, X, y=None):
+        return self
+    
+    def transform(self, X):
+        # Drop duplicate columns based on their name
+        X = X.loc[:, ~X.columns.duplicated()]
+        return X
+
 ######### FUNCTIONS FOR WEBSCRAPING #####################
 
 def extract_cep(driver):
@@ -559,3 +603,5 @@ def extract_title_using_xpath(driver):
         return title_text
     except NoSuchElementException:
         return None
+
+

@@ -6,13 +6,16 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error, mean_absolu
 import yaml
 import joblib
 from sklearn.model_selection import train_test_split
-from src.utils.utils import load_config, save_model, load_data, evaluate_model
+from utils.utils import load_config, save_model, load_data, evaluate_model
 import matplotlib.pyplot as plt
+import sys
+sys.path.append("C:/Users/vitor/OneDrive/Área de Trabalho/projetos/projeto_olx/")
+
 
 
 
 # Import necessary functions from utils
-from src.utils.utils import select_features_and_target, train_model, load_config, save_model, load_data, evaluate_model
+from utils.utils import select_features_and_target, train_model, load_config, save_model, load_data, evaluate_model
 
 
 

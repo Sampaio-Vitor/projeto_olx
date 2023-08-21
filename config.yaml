@@ -83,13 +83,13 @@ score_new_pred:
     - DETAIL_Área de serviço
     - REGION_barreiro
     - REGION_pampulha
-    - REGION_venda nova
-    - REGION_centro sul
-    - REGION_zona leste
-    - REGION_zona nordeste
-    - REGION_zona noroeste
-    - REGION_zona norte
-    - REGION_zona oeste
+    - REGION_venda_nova
+    - REGION_centro_sul
+    - REGION_zona_leste
+    - REGION_zona_nordeste
+    - REGION_zona_noroeste
+    - REGION_zona_norte
+    - REGION_zona_oeste
     - LOG_AREA
     - LOG_AVG_PRICE_PER_SQMT_BY_REGION
     - UTILS

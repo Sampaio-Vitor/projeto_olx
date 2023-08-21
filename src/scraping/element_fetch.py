@@ -23,7 +23,7 @@ file_exists = os.path.isfile(output_path)
 
 if not file_exists:
     with open(output_path, 'w', newline='', encoding='utf-8') as file:
-        writer = csv.DictWriter(file, fieldnames=['LINK','TITLE', 'PRICE', 'CEP', 'NEIGHBORHOOD', 'CONDO', 'TAX', 'AREA', 'ROOMS_NO', 'BATH_NO', 'PARKING_SPOTS', 'APARTMENT_DETAILS', 'CITY', 'DATE_SCRAPE'])
+        writer = csv.DictWriter(file, fieldnames=['LINK','TITLE', 'PRICE', 'CEP', 'NEIGHBORHOOD', 'CONDO', 'TAX', 'AREA', 'ROOMS_NO', 'BATH_NO', 'PARKING_SPOTS', 'APARTMENT_DETAILS','REGION', 'CITY', 'DATE_SCRAPE'])
         writer.writeheader()
 
 if __name__ == "__main__":
@@ -135,6 +135,9 @@ if __name__ == "__main__":
         #if apt_details:
             #print(f"Found Apartment Details: {apt_details} for link: {link}")
         apartment_details_list.append(apt_details)
+        
+        #Extract region from original df
+        region = df[df['link'] == link]['REGION'].iloc[0]
 
 
 
@@ -151,6 +154,7 @@ if __name__ == "__main__":
         'BATH_NO': bath_no,
         'PARKING_SPOTS': parking_spots,
         'APARTMENT_DETAILS': apt_details,
+        'REGION': region,
         'CITY': "Belo Horizonte",
         'DATE_SCRAPE': datetime.now()  # Adjust if you have another method of capturing the scrape date
         }

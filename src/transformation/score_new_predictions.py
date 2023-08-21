@@ -2,6 +2,9 @@ import pandas as pd
 from joblib import load
 from utils.utils import load_config
 import numpy as np
+import sys
+sys.path.append("C:/Users/vitor/OneDrive/Área de Trabalho/projetos/projeto_olx/")
+
 
 
 
@@ -17,6 +20,15 @@ if __name__ == "__main__":
     
     # Apply the pipeline to preprocess the new data
     preprocessed_data = preprocessing_pipeline.transform(new_data)
+    nan_counts = preprocessed_data.isnull().sum()
+    for column, nan_count in nan_counts.items():
+        if nan_count > 0:
+            print(f"Column: {column}, NaN Count: {nan_count}")
+    region_counts = preprocessed_data['REGION'].value_counts()
+    print(region_counts)
+
+
+
 
 
     # Now, score the preprocessed data
