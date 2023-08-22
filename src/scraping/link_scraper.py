@@ -9,6 +9,7 @@ import pandas as pd
 import time
 import yaml
 import os
+import re
 
 class LinkScraper:
     
@@ -17,7 +18,7 @@ class LinkScraper:
         self.csv_filename = config['scraper']['csv_filename']
         self.sleep_time = config['scraper']['sleep_time']
         self.options = Options()
-        #self.options.add_argument("--headless")
+        self.options.add_argument("--headless")
         self.options.add_argument('--ignore-certificate-errors')
         self.options.add_argument('--ignore-ssl-errors')
         self.options.add_experimental_option('excludeSwitches', ['enable-logging'])
@@ -27,30 +28,25 @@ class LinkScraper:
     def fetch_data_from_page(self, url):
         self.driver.get(url)
         WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, 'body')))
-        soup = BeautifulSoup(self.driver.page_source, 'html.parser')
+        
+        page_source = self.driver.page_source
+
+        # Using regex to find all links starting with the pattern
+        link_pattern = r'https://mg\.olx\.com\.br/belo-horizonte-e-regiao/imoveis/[a-zA-Z0-9\-]+'
+        found_links = list(set(re.findall(link_pattern, page_source)))
 
         data = []
 
-        try:
-            links_elements = self.driver.find_elements(By.XPATH, '//*[@id="main-content"]/div[16]/section/a')
-            links = [link_elem.get_attribute('href') for link_elem in links_elements]
+        for link in found_links:
+            if link not in self.seen_links:
+                self.seen_links.add(link)
+                row = {
+                    'link': link,
+                    'date': datetime.now()
+                }
+                data.append(row)
 
-            dates_elements = self.driver.find_elements(By.XPATH, '//*[@id="main-content"]/div[15]/section/div[2]/div[2]/div/div[2]/p[2]')
-            dates = [date_elem.text for date_elem in dates_elements]
-
-            for link, date in zip(links, dates):
-                print(f"Found link: {link} with date: {date}")  # Debug print
-                if "Hoje" in date and link not in self.seen_links:
-                    self.seen_links.add(link)
-                    row = {
-                        'link': link,
-                        'date': datetime.now()
-                    }
-                    data.append(row)
-        except Exception as e:
-            print(f"Error while scraping page {url}: {e}")
-
-        return data[4:]
+        return data
 
     def save_to_csv(self, data, region, mode='w'):
         df = pd.DataFrame(data)
