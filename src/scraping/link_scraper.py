@@ -24,7 +24,11 @@ class LinkScraper:
         self.options.add_argument('--ignore-ssl-errors')
         self.options.add_experimental_option('excludeSwitches', ['enable-logging'])
         self.driver = webdriver.Chrome(options=self.options)
-        self.seen_links = set()
+        if os.path.exists(self.csv_filename):
+            existing_df = pd.read_csv(self.csv_filename)
+            self.seen_links = set(existing_df['link'].tolist())
+        else:
+            self.seen_links = set()
         
     def fetch_data_from_page(self, url):
         self.driver.get(url)
@@ -43,7 +47,8 @@ class LinkScraper:
                 self.seen_links.add(link)
                 row = {
                     'link': link,
-                    'date': datetime.now()
+                    'date': datetime.now(),
+                    'is_new': 1
                 }
                 data.append(row)
 
@@ -57,10 +62,11 @@ class LinkScraper:
     def scrape_links(self):
         for region in self.regions:
             page = 1
+            collected_links = 0  # Counter for collected links
             region_name = region['name']
             base_url = region['url']
             
-            while True:
+            while collected_links < self.links_per_region:
                 if page == 1:
                     url = base_url
                 else:
@@ -74,12 +80,21 @@ class LinkScraper:
                 print(f"Scraping region: {region_name} - Page number: {page}")
                 print(f"Length of DataFrame: {len(new_data)}")
 
-                # Save after every page
-                self.save_to_csv(new_data, region_name, mode='a')
+                # Calculate the number of links that can be collected in this iteration
+                links_to_collect = min(self.links_per_region - collected_links, len(new_data))
+                collected_links += links_to_collect
+
+                # Save the links for this iteration
+                self.save_to_csv(new_data[:links_to_collect], region_name, mode='a')
 
                 page += 1
                 time.sleep(self.sleep_time)
-                print(f"{len(new_data)} links found on this page.")
+                print(f"{links_to_collect} links found on this page. Total collected: {collected_links}")
+
+            if collected_links >= self.links_per_region:
+                print(f"Collected {collected_links} links for region: {region_name}. Limit reached.")
+            else:
+                print(f"Collected {collected_links} links for region: {region_name}. Insufficient links available.")
 
 if __name__ == "__main__":
     with open("config.yaml", "r", encoding="utf-8") as f:

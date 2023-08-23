@@ -20,16 +20,7 @@ if __name__ == "__main__":
     
     # Apply the pipeline to preprocess the new data
     preprocessed_data = preprocessing_pipeline.transform(new_data)
-    nan_counts = preprocessed_data.isnull().sum()
-    for column, nan_count in nan_counts.items():
-        if nan_count > 0:
-            print(f"Column: {column}, NaN Count: {nan_count}")
-    region_counts = preprocessed_data['REGION'].value_counts()
-    print(region_counts)
-
-
-
-
+    
 
     # Now, score the preprocessed data
     predictions = trained_model.predict(preprocessed_data[features_predict])
