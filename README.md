@@ -6,7 +6,7 @@
 ![image](https://github.com/Sampaio-Vitor/projeto_olx/assets/110466124/abfe3647-0d04-44f6-9558-d51a660809e2)
 
 
-## **Projeto: Predição de Preços de Imóveis na OLX**
+## **ApêPrevê: Predição de Preços de Imóveis na OLX**
 
 **Status:** 🚧 Em Andamento 🚧
 
