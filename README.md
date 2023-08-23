@@ -1,6 +1,10 @@
 # `README.md`
 
 ---
+# MVP DO PROJETO:
+
+![image](https://github.com/Sampaio-Vitor/projeto_olx/assets/110466124/abfe3647-0d04-44f6-9558-d51a660809e2)
+
 
 ## **Projeto: Predição de Preços de Imóveis na OLX**
 
@@ -18,7 +22,7 @@ Este projeto tem como objetivo realizar raspagem de dados (web scraping) diária
 
 ### **Stack:**
 
-- **Ambiente em Nuvem:** Google Cloud Platform (GCP)
+- **Ambiente em Nuvem:** Amazon Web Services (AWS)
 - **Armazenamento de Dados:** Google Cloud Storage (tanto para dados brutos no data lake quanto para dados processados após previsões de ML)
 - **MLOps:** GitHub Actions para automação CI/CD e retreino de modelos
 - **Validação de Dados:** Great Expectations
@@ -27,10 +31,14 @@ Este projeto tem como objetivo realizar raspagem de dados (web scraping) diária
 
 ### **Próximos Passos:**
 
-- [ ] Treinar os modelos iniciais e definir benchmarks para as métricas do modelo.
-- [ ] Configurar pipelines de ingestão de dados usando Apache Beam e garantir a validação de dados usando o Great Expectations.
-- [ ] Configurar o GitHub Actions para o fluxo de trabalho MLOps.
-- [ ] Projetar e implementar a interface do usuário.
+- [✅] Treinar os modelos iniciais e definir benchmarks para as métricas do modelo.
+- [✅] Configurar pipelines de ingestão de dados usando Apache Beam e garantir a validação de dados usando o Great Expectations.
+- [✅] Configurar o GitHub Actions para o fluxo de trabalho MLOps.
+- [✅] Projetar e implementar a interface do usuário.
+- [ ] Dockerizar a aplicação e colocar na nuvem em uma instância EC2 (AWS).
+- [ ] Aplicar tratativas de MLOps (GitHub Actions, Retreinamento semanal do Modelo, Implementar logger, etc.
+- [ ] Criar um arquivo .md que mostrará as métricas atuais do modelo em produção além de outras métricas.
+- [ ] Criar um Dashboard com status dos dados armazenados, além de monitoramento e saúde dos dados.
 
 ### **Contribuições:**
 
@@ -38,6 +46,6 @@ Este projeto está na fase ativa de desenvolvimento. Se você está interessado 
 
 ---
 
-*Última Atualização: *07/08/2023*
+*Última Atualização: *23/08/2023*
 
 
