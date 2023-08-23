@@ -17,6 +17,7 @@ class LinkScraper:
         self.regions = config['scraper']['regions']
         self.csv_filename = config['scraper']['csv_filename']
         self.sleep_time = config['scraper']['sleep_time']
+        self.links_per_region = 50 #Just for collecting the 50 first as a baseline
         self.options = Options()
         self.options.add_argument("--headless")
         self.options.add_argument('--ignore-certificate-errors')

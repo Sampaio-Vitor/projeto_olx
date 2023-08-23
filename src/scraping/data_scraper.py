@@ -32,7 +32,7 @@ class DataScraper:
     def fetch_data_from_ad(self, url, region):
         try:
             self.driver.get(url)
-            WebDriverWait(self.driver, 30).until(EC.presence_of_element_located((By.LINK_TEXT, 'Ajuda e contato')))
+            WebDriverWait(self.driver, 15).until(EC.presence_of_element_located((By.XPATH, '//*[@id="content"]/div[2]/div/div[2]/div[2]/div[14]/div/div/div[1]/div')))
             soup = BeautifulSoup(self.driver.page_source, 'html.parser')
 
             all_spans = soup.find_all('span', {'class': 'ad__sc-1f2ug0x-1 cpGpXB sc-hSdWYo gwYTWo'})
