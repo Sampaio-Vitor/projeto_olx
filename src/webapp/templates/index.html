@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/logo.png') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alice&display=swap" rel="stylesheet">
+    <title>ApêPrevê</title>
+</head>
+<body>
+    <div class="hero">
+        <div class="logo">
+            <a href="/">
+                <img src="{{ url_for('static', filename='img/hero_image.png') }}" alt="ApêPrevê Logo">
+            </a>
+        </div>
+    </div>
+    
+    <div class="divider"></div> <!-- Thin black line divider -->
+    
+    <div class="description">
+        <p class="tagline">Descubra apartamentos anunciados hoje ({{ today_date }}) que estão quentes em BH 🔥</p>
+    </div>
+
+<!-- ... (existing code) ... -->
+
+<!-- Data table -->
+<!-- Data table -->
+<div class="data-table">
+    <table>
+        <thead>
+            <tr>
+                <!-- Headers -->
+                
+                <th>Anúncio</th> 
+                <th>Hotness</th>
+                <!-- ... (other headers) ... -->
+                <th>Bairro</th>
+                <th>Preço Anunciado</th> 
+                <th>Preço Justo Calculado pela AI 🧠</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in records %}
+                <tr>
+                    
+                    <!-- Embed the link in the title -->
+                    <td><a href="{{ record["LINK"] }}" target="_blank">{{ record["TITLE"] }}</a></td>
+                    <td>{{ record["Hotness"] }}</td>
+                    <!-- ... (other data columns) ... -->
+                    <td>{{ record["Bairro"] }}</td>
+                    <!-- Format the prices with "R$" and thousands separator -->
+                    <td>R$ {{ '{:,.2f}'.format(record["PRICE"]).replace(',', ' ').replace('.', ',').replace(' ', '.') }}</td>
+                    <td>R$ {{ '{:,.2f}'.format(record["Predictions"]).replace(',', ' ').replace('.', ',').replace(' ', '.') }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
