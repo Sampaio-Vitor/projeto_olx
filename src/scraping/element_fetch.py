@@ -8,7 +8,10 @@ from datetime import datetime
 import pandas as pd
 import numpy as np
 import yaml
-from utils.utils import (find_content_by_regex, extract_apartment_details, extract_parking_spots, 
+#import sys
+#sys.path.append('C:\\Users\\vitor\\OneDrive\\Área de Trabalho\\projetos\\projeto_olx')
+
+from src.utils.utils import (find_content_by_regex, extract_apartment_details, extract_parking_spots, 
                          extract_baths, extract_rooms, extract_area, extract_tax, extract_condo, 
                          extract_neighborhood, extract_cep, page_not_found, extract_price_using_xpath, 
                          extract_title_using_xpath)
@@ -38,6 +41,9 @@ if __name__ == "__main__":
     options.add_argument('--ignore-ssl-errors')
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
     options.add_argument(f"user-agent={ua.random}")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
 
     driver = webdriver.Chrome(options=options)
     df = pd.read_csv('data/new_links_olx.csv')

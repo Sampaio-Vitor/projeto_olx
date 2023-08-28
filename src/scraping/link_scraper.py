@@ -23,6 +23,9 @@ class LinkScraper:
         self.options.add_argument('--ignore-certificate-errors')
         self.options.add_argument('--ignore-ssl-errors')
         self.options.add_experimental_option('excludeSwitches', ['enable-logging'])
+        self.options.add_argument("--disable-gpu")
+        self.options.add_argument("--no-sandbox")
+        self.options.add_argument("--disable-dev-shm-usage")
         self.driver = webdriver.Chrome(options=self.options)
         if os.path.exists(self.csv_filename):
             existing_df = pd.read_csv(self.csv_filename)

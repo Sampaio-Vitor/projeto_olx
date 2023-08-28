@@ -37,6 +37,12 @@ COPY data/train_data/final_dataframe.csv /app/data/train_data/final_dataframe.cs
 # Copy source code and other utilities
 COPY src /app/src
 
+# Copy the best_model.pkl file
+COPY models/best_model.pkl /app/models/best_model.pkl
+
+# Add the root directory of your project to the Python path
+ENV PYTHONPATH="/app:${PYTHONPATH}"
+
 # Copy the root level important files
 COPY .gitignore /app/.gitignore
 COPY config.yaml /app/config.yaml

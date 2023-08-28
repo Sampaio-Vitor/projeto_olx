@@ -3,8 +3,8 @@ import pandas as pd
 from sklearn.pipeline import Pipeline, FunctionTransformer
 import numpy as np
 from joblib import dump
-import sys
-sys.path.append("C:/Users/vitor/OneDrive/Área de Trabalho/projetos/projeto_olx/")
+#import sys
+#sys.path.append("C:/Users/vitor/OneDrive/Área de Trabalho/projetos/projeto_olx/")
 
 expected_columns = [
     "TITLE",

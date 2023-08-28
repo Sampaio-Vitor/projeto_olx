@@ -1,9 +1,9 @@
 import pandas as pd
 from joblib import load
-from utils.utils import load_config
+from src.utils.utils import load_config
 import numpy as np
-import sys
-sys.path.append("C:/Users/vitor/OneDrive/Área de Trabalho/projetos/projeto_olx/")
+#import sys
+#sys.path.append("C:/Users/vitor/OneDrive/Área de Trabalho/projetos/projeto_olx/")
 
 
 

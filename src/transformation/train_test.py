@@ -8,8 +8,8 @@ import joblib
 from sklearn.model_selection import train_test_split
 from utils.utils import load_config, save_model, load_data, evaluate_model
 import matplotlib.pyplot as plt
-import sys
-sys.path.append("C:/Users/vitor/OneDrive/Área de Trabalho/projetos/projeto_olx/")
+#import sys
+#sys.path.append("C:/Users/vitor/OneDrive/Área de Trabalho/projetos/projeto_olx/")
 
 
 
