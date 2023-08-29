@@ -1,4 +1,3 @@
-# .github/workflows/config.yaml
 name: CI/CD Workflow
 
 on:
@@ -72,14 +71,16 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
+      - name: Clean previous images and containers
+        run: |
+          docker system prune -f
+
       - name: Pull latest images
         run: |
           docker pull ${{secrets.AWS_ECR_LOGIN_URI}}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
 
       - name: Run Docker Image to serve users
         run: |
+          docker stop mlproj || true
+          docker rm mlproj || true
           docker run -d -p 5001:5000 --name=mlproj -e 'AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}' -e 'AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}' -e 'AWS_REGION=${{ secrets.AWS_REGION }}'  ${{secrets.AWS_ECR_LOGIN_URI}}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
-
-      - name: Clean previous images and containers
-        run: |
-          docker system prune -f
