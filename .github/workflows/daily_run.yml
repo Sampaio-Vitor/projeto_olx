@@ -2,7 +2,7 @@ name: Daily Run Workflow
 
 on:
   schedule:
-    - cron: '0 14 * * *' # This runs the job every day at 2 PM UTC
+    - cron: '10 19 * * *' # This runs the job every day at 2 PM UTC
 
 permissions:
   id-token: write
