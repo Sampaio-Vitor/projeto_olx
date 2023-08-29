@@ -1,0 +1,35 @@
+name: Daily Run Workflow
+
+on:
+  schedule:
+    - cron: '45 18 * * *' # This runs the job every day at 2 PM UTC
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  daily_run:
+    name: Run Daily Tasks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      # Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      # Run link_scraper.py
+      - name: Execute link_scraper.py
+        run: python src/scraping/link_scraper.py
+
+      # Run element_fetch.py
+      - name: Execute element_fetch.py
+        run: python src/scraping/element_fetch.py
+
+      # Run score_new_predictions.py
+      - name: Execute score_new_predictions.py
+        run: python src/transformation/score_new_predictions.py
