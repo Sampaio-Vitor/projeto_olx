@@ -9,13 +9,11 @@ RUN apt-get update -q && apt-get install -y -q --fix-missing \
     wget \
     unzip
 
-# Add Google Chrome's official repository and install the specific version
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
-    echo "deb http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list && \
-    apt-get update && \
-    apt-get install -y google-chrome-stable=116.0.5845.110-1
+# Download and install the specific version of Google Chrome
+RUN wget https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_116.0.5845.110-1_amd64.deb && \
+    dpkg -i google-chrome-stable_116.0.5845.110-1_amd64.deb || apt-get install -f
 
-# Download and unzip the provided Chromium file
+# Download and unzip the provided Chromium file (if still needed)
 RUN wget https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/116.0.5845.96/linux64/chrome-linux64.zip && \
     unzip chrome-linux64.zip -d /usr/bin
 
