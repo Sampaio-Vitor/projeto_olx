@@ -13,9 +13,19 @@ jobs:
   daily_run:
     name: Run Daily Tasks
     runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: ./src  # Add PYTHONPATH environment variable
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
+
+      # Debug Step: Show current directory
+      - name: Show current directory
+        run: pwd
+
+      # Debug Step: List directory structure
+      - name: List directory structure
+        run: ls -R
 
       # Set up Python
       - name: Set up Python
