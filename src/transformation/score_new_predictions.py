@@ -2,10 +2,27 @@ import pandas as pd
 from joblib import load
 from src.utils.utils import load_config
 import numpy as np
+import boto3
+import io
+from io import StringIO
+
 #import sys
 #sys.path.append("C:/Users/vitor/OneDrive/Área de Trabalho/projetos/projeto_olx/")
 
+s3 = boto3.client('s3',
+                  aws_access_key_id='AKIARZZDJ5FLJQOG2IN7',
+                  aws_secret_access_key='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',
+                  region_name='sa-east-1')
+bucket_name = 'bucketolx'
 
+def save_to_s3(df, file_name):
+    csv_buffer = StringIO()
+    df.to_csv(csv_buffer, index=False)
+    s3.put_object(Body=csv_buffer.getvalue(), Bucket=bucket_name, Key=file_name)
+
+def read_from_s3(file_name):
+    obj = s3.get_object(Bucket=bucket_name, Key=file_name)
+    return pd.read_csv(io.BytesIO(obj['Body'].read()))
 
 
 
@@ -14,7 +31,7 @@ features_predict  = config['model']['features']
 if __name__ == "__main__":
 
     # Load your new data, the trained model, and the preprocessing pipeline
-    new_data = pd.read_csv("data/dados_detalhados_olx.csv")
+    new_data = read_from_s3("data/dados_detalhados_olx.csv")
     preprocessing_pipeline = load("src/transformation/pipelines/final_transformation_pipeline.pkl")
     trained_model = load("models/best_model.pkl")  
     
@@ -32,4 +49,4 @@ if __name__ == "__main__":
     preprocessed_data['Predictions'] = predictions_linear
     
     # Save or process scored data as needed
-    preprocessed_data.to_csv("data/scored_data.csv", index=False)
+    save_to_s3(preprocessed_data, "data/scored_data.csv")
