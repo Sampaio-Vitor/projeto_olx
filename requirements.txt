@@ -47,4 +47,4 @@ urllib3==2.0.4
 Werkzeug==2.3.7
 wsproto==1.2.0
 zipp==3.16.2
-boto3==1.18.69
+boto3==1.28.39
