@@ -8,8 +8,18 @@ from datetime import datetime
 import pandas as pd
 import numpy as np
 import yaml
+import boto3
+import io
+from io import StringIO
+
 #import sys
 #sys.path.append('C:\\Users\\vitor\\OneDrive\\Área de Trabalho\\projetos\\projeto_olx')
+
+s3 = boto3.client('s3',
+                  aws_access_key_id='AKIARZZDJ5FLJQOG2IN7',
+                  aws_secret_access_key='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',
+                  region_name='sa-east-1')
+bucket_name = 'bucketolx'
 
 from src.utils.utils import (find_content_by_regex, extract_apartment_details, extract_parking_spots, 
                          extract_baths, extract_rooms, extract_area, extract_tax, extract_condo, 
@@ -19,6 +29,17 @@ import os
 import csv
 from fake_useragent import UserAgent
 
+# Função para salvar no S3
+def save_to_s3(df, file_name):
+    csv_buffer = StringIO()
+    df.to_csv(csv_buffer, index=False)
+    s3.put_object(Body=csv_buffer.getvalue(), Bucket=bucket_name, Key=file_name)
+
+# Função para ler do S3
+def read_from_s3(file_name):
+    obj = s3.get_object(Bucket=bucket_name, Key=file_name)
+    return pd.read_csv(io.BytesIO(obj['Body'].read()))
+  
 ua = UserAgent()
 
 output_path = 'data/dados_detalhados_olx.csv'
@@ -46,7 +67,7 @@ if __name__ == "__main__":
     options.add_argument("--disable-dev-shm-usage")
 
     driver = webdriver.Chrome(options=options)
-    df = pd.read_csv('data/new_links_olx.csv')
+    df = read_from_s3('data/new_links_olx.csv')
     df = df[df['is_new'] == 1]
 
     for index, row in df.iterrows():
@@ -104,4 +125,5 @@ if __name__ == "__main__":
 
     # Save the updated DataFrame back to the csv after the loop
     df.to_csv('data/new_links_olx.csv', index=False)
+    save_to_s3(df, 'data/new_links_olx.csv')
     driver.quit()
