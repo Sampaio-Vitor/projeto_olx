@@ -11,6 +11,10 @@ s3 = boto3.client('s3',
                   region_name='sa-east-1')
 bucket_name = 'bucketolx'
 
+def read_from_s3(file_name):
+    obj = s3.get_object(Bucket=bucket_name, Key=file_name)
+    return pd.read_csv(io.BytesIO(obj['Body'].read()))
+
 app = Flask(__name__)
 
 @app.route('/')
