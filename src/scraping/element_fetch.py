@@ -55,6 +55,10 @@ if not file_exists:
       
 existing_data = read_from_s3('data/dados_detalhados_olx.csv')
 
+scraped_data = pd.DataFrame(columns=['LINK', 'TITLE', 'PRICE', 'CEP', 'NEIGHBORHOOD', 'CONDO', 
+                                         'TAX', 'AREA', 'ROOMS_NO', 'BATH_NO', 'PARKING_SPOTS', 
+                                         'APARTMENT_DETAILS', 'REGION', 'CITY', 'DATE_SCRAPE'])
+
 
 if __name__ == "__main__":
     with open('config.yaml', 'r', encoding='utf-8') as f:
@@ -69,9 +73,7 @@ if __name__ == "__main__":
     options.add_argument("--disable-gpu")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
-    scraped_data = pd.DataFrame(columns=['LINK', 'TITLE', 'PRICE', 'CEP', 'NEIGHBORHOOD', 'CONDO', 
-                                         'TAX', 'AREA', 'ROOMS_NO', 'BATH_NO', 'PARKING_SPOTS', 
-                                         'APARTMENT_DETAILS', 'REGION', 'CITY', 'DATE_SCRAPE'])
+
 
     driver = webdriver.Chrome(options=options)
     df = read_from_s3('data/new_links_olx.csv')
@@ -123,7 +125,7 @@ if __name__ == "__main__":
             'DATE_SCRAPE': datetime.now()
         }
       
-        scraped_data = scraped_data.append(data, ignore_index=True)
+        scraped_data = pd.concat([scraped_data, pd.DataFrame([data])], ignore_index=True)
 
         # After scraping details of the link successfully, mark it as not new
         df.at[index, 'is_new'] = 0
