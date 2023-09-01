@@ -10,6 +10,9 @@ import time
 import yaml
 import os
 import re
+import boto3
+import io
+from io import StringIO
 
 class LinkScraper:
     
