@@ -11,6 +11,7 @@ import yaml
 import boto3
 import io
 from io import StringIO
+from selenium.common.exceptions import TimeoutException
 
 #import sys
 #sys.path.append('C:\\Users\\vitor\\OneDrive\\Área de Trabalho\\projetos\\projeto_olx')
@@ -51,6 +52,9 @@ if not file_exists:
                                                   'TAX', 'AREA', 'ROOMS_NO', 'BATH_NO', 'PARKING_SPOTS', 
                                                   'APARTMENT_DETAILS', 'REGION', 'CITY', 'DATE_SCRAPE'])
         writer.writeheader()
+      
+existing_data = read_from_s3('data/dados_detalhados_olx.csv')
+
 
 if __name__ == "__main__":
     with open('config.yaml', 'r', encoding='utf-8') as f:
@@ -65,6 +69,9 @@ if __name__ == "__main__":
     options.add_argument("--disable-gpu")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
+    scraped_data = pd.DataFrame(columns=['LINK', 'TITLE', 'PRICE', 'CEP', 'NEIGHBORHOOD', 'CONDO', 
+                                         'TAX', 'AREA', 'ROOMS_NO', 'BATH_NO', 'PARKING_SPOTS', 
+                                         'APARTMENT_DETAILS', 'REGION', 'CITY', 'DATE_SCRAPE'])
 
     driver = webdriver.Chrome(options=options)
     df = read_from_s3('data/new_links_olx.csv')
@@ -115,15 +122,17 @@ if __name__ == "__main__":
             'CITY': "Belo Horizonte",
             'DATE_SCRAPE': datetime.now()
         }
-
-        with open(output_path, 'a', newline='', encoding='utf-8') as file:
-            writer = csv.DictWriter(file, fieldnames=data.keys())
-            writer.writerow(data)
+      
+        scraped_data = scraped_data.append(data, ignore_index=True)
 
         # After scraping details of the link successfully, mark it as not new
         df.at[index, 'is_new'] = 0
+      
+    combined_data = pd.concat([existing_data, scraped_data], ignore_index=True)
 
     # Save the updated DataFrame back to the csv after the loop
     df.to_csv('data/new_links_olx.csv', index=False)
     save_to_s3(df, 'data/new_links_olx.csv')
+    save_to_s3(combined_data, 'data/dados_detalhados_olx.csv')
+
     driver.quit()
