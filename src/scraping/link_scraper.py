@@ -32,6 +32,13 @@ class LinkScraper:
             self.seen_links = set(existing_df['link'].tolist())
         else:
             self.seen_links = set()
+        self.s3 = boto3.client(
+            's3',
+            aws_access_key_id='AKIARZZDJ5FLJQOG2IN7',
+            aws_secret_access_key='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',
+            region_name='sa-east-1'
+        )
+        self.bucket_name = 'bucketolx'  # Nome do seu bucket S3
         
     def fetch_data_from_page(self, url):
         self.driver.get(url)
@@ -60,7 +67,15 @@ class LinkScraper:
     def save_to_csv(self, data, region, mode='w'):
         df = pd.DataFrame(data)
         df['REGION'] = region
-        df.to_csv(self.csv_filename, mode=mode, header=not os.path.exists(self.csv_filename), index=False)
+        local_file_path = self.csv_filename
+        df.to_csv(local_file_path, mode=mode, header=not os.path.exists(local_file_path), index=False)
+        
+        # Após salvar localmente, faça o upload para o S3
+        self.save_to_s3(local_file_path)
+
+    def save_to_s3(self, local_file_path):
+        self.s3.upload_file(local_file_path, self.bucket_name, local_file_path)
+        
 
     def scrape_links(self):
         for region in self.regions:
