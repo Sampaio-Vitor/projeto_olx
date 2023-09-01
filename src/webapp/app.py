@@ -1,13 +1,22 @@
 from flask import Flask, render_template
 import pandas as pd
 from datetime import datetime
+import boto3
+import io
+from io import StringIO
+
+s3 = boto3.client('s3',
+                  aws_access_key_id='AKIARZZDJ5FLJQOG2IN7',
+                  aws_secret_access_key='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',
+                  region_name='sa-east-1')
+bucket_name = 'bucketolx'
 
 app = Flask(__name__)
 
 @app.route('/')
 def index():
     # Load the data from the CSV file
-    df = pd.read_csv("data/scored_data.csv")
+    df = read_from_s3("data/scored_data.csv")
 
     # Convert DATE_SCRAPE to datetime format
     df['DATE_SCRAPE'] = pd.to_datetime(df['DATE_SCRAPE'])
@@ -52,4 +61,4 @@ def index():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080, debug = True)
+    app.run(host='0.0.0.0', port=8080)
