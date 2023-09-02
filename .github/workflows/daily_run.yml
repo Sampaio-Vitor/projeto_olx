@@ -2,7 +2,7 @@ name: Run Python Scripts in Docker
 
 on:
   schedule:
-    - cron: '0 15 * * *'  # Runs every day at 15:00 UTC
+    - cron: '0 8 * * *'  # Runs every day at 8:00 UTC
   workflow_dispatch:  # Allows you to run this workflow manually from the GitHub Actions interface
 
 jobs:
