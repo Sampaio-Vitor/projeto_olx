@@ -13,6 +13,7 @@ import re
 import boto3
 import io
 from io import StringIO
+import os
 
 class LinkScraper:
     
@@ -35,12 +36,13 @@ class LinkScraper:
             self.seen_links = set(existing_df['link'].tolist())
         else:
             self.seen_links = set()
-        self.s3 = boto3.client(
-            's3',
-            aws_access_key_id='AKIARZZDJ5FLJQOG2IN7',
-            aws_secret_access_key='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',
-            region_name='sa-east-1'
-        )
+            self.s3 = boto3.client(
+                's3',
+                aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
+                aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'),
+                region_name=os.environ.get('AWS_REGION', 'sa-east-1')
+            )
+
         self.bucket_name = 'bucketolx'  # Nome do seu bucket S3
         
     def fetch_data_from_page(self, url):
