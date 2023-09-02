@@ -5,14 +5,14 @@ import numpy as np
 import boto3
 import io
 from io import StringIO
-
+import os
 #import sys
 #sys.path.append("C:/Users/vitor/OneDrive/Área de Trabalho/projetos/projeto_olx/")
 
 s3 = boto3.client('s3',
-                  aws_access_key_id='AKIARZZDJ5FLJQOG2IN7',
-                  aws_secret_access_key='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',
-                  region_name='sa-east-1')
+                  aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
+                  aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'),
+                  region_name=os.environ.get('AWS_REGION', 'sa-east-1')) 
 bucket_name = 'bucketolx'
 
 def save_to_s3(df, file_name):
