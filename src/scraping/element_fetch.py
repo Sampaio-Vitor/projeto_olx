@@ -12,14 +12,16 @@ import boto3
 import io
 from io import StringIO
 from selenium.common.exceptions import TimeoutException
+import os
 
 #import sys
 #sys.path.append('C:\\Users\\vitor\\OneDrive\\Área de Trabalho\\projetos\\projeto_olx')
 
 s3 = boto3.client('s3',
-                  aws_access_key_id='AKIARZZDJ5FLJQOG2IN7',
-                  aws_secret_access_key='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',
-                  region_name='sa-east-1')
+                  aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
+                  aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'),
+                  region_name=os.environ.get('AWS_REGION', 'sa-east-1'))
+
 bucket_name = 'bucketolx'
 
 from src.utils.utils import (find_content_by_regex, extract_apartment_details, extract_parking_spots, 
