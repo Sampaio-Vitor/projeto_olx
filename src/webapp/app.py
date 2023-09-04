@@ -4,6 +4,7 @@ from datetime import datetime
 import boto3
 import io
 from io import StringIO
+import os
 
 s3 = boto3.client('s3',
                   aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
