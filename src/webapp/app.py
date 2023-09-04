@@ -6,9 +6,9 @@ import io
 from io import StringIO
 
 s3 = boto3.client('s3',
-                  aws_access_key_id='AKIARZZDJ5FLJQOG2IN7',
-                  aws_secret_access_key='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',
-                  region_name='sa-east-1')
+                  aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
+                  aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'),
+                  region_name=os.environ.get('AWS_REGION', 'sa-east-1'))
 bucket_name = 'bucketolx'
 
 def read_from_s3(file_name):
