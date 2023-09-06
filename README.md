@@ -22,12 +22,13 @@ Este projeto tem como objetivo realizar raspagem de dados (web scraping) diária
 
 ### **Próximas implementações:**
 1. Adicionar logging ao código para que tenhamos controle maior sob o que ocorre por trás e registra-los em um arquivo de log;
-2. Reorganizar código removendo partes que possivelmente sejam inuteis.
-3. Criar calculadora que solicitará o usuário os detalhes do apartamento, e através de solicitação API para o modelo treinado, será retornado o valor sugerido para o apartamento.
-4. Criar dashboard dos dados entrantes, com georeferenciamento.
-5. Criar arquivo MD que explica cada função utilizada no código.
-6. Implementar certificado SSL no website.
-7. Salvar os dados em um banco de dados SQL na AWS, invés de CSV no S3.
+2. Adicionar retreinamento do modelo automatico. Serão desenvolvidos mais 2 (pelo menos) modelos de regressão. Baseado no RMSE, o modelo será selecionado a partir do treinamento com os novos dados quinzenalmente. Será implementado teste de hipóteses automático para seleção de modelo ativo.
+3. Reorganizar código removendo partes que possivelmente sejam inuteis.
+4. Criar calculadora que solicitará o usuário os detalhes do apartamento, e através de solicitação API para o modelo treinado, será retornado o valor sugerido para o apartamento.
+5. Criar dashboard dos dados entrantes, com georeferenciamento.
+6. Criar arquivo MD que explica cada função utilizada no código.
+7. Implementar certificado SSL no website.
+8. Salvar os dados em um banco de dados SQL na AWS, invés de CSV no S3.
 
 
 ### **Stack:**
