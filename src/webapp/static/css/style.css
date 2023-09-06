@@ -95,6 +95,19 @@ body {
 }
 
 .social-logos {
-    display: flex; /* align the LinkedIn and GitHub logos horizontally */
-    gap: 12px; /* space between LinkedIn and GitHub logos */
+    display: flex;
+    flex-direction: column; /* Content stacks vertically */
+    align-items: flex-end;  /* Align items to the right */
+}
+
+.icons {
+    display: flex; /* Icons side by side */
+    gap: 10px;     /* Space between icons */
+}
+
+.social-description {
+    font-style: italic;
+    font-family: 'Alice', sans-serif;  /* Use the "Alice" font */
+    font-size: 0.8em;  /* Reduce the font size by 50% */
+    margin-top: 10px;
 }

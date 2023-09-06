@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GTK22TSESX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-GTK22TSESX');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
@@ -20,17 +29,21 @@
             </div>
         </div>
         <div class="social-logos">
-            <div class="github-logo">
-                <a href="https://github.com/Sampaio-Vitor" target="_blank">
-                    <img src="{{ url_for('static', filename='img/github.png') }}" alt="Access my Github">
-                </a>
+            <div class="icons">
+                <div class="github-logo">
+                    <a href="https://github.com/Sampaio-Vitor" target="_blank">
+                        <img src="{{ url_for('static', filename='img/github.png') }}" alt="Access my Github">
+                    </a>
+                </div>
+                <div class="linkedin-logo">
+                    <a href="https://www.linkedin.com/in/vitorcsampaio/" target="_blank">
+                        <img src="{{ url_for('static', filename='img/linkedin.png') }}" alt="Access my Linkedin">
+                    </a>
+                </div>
             </div>
-            <div class="linkedin-logo">
-                <a href="https://www.linkedin.com/in/vitorcsampaio/" target="_blank">
-                    <img src="{{ url_for('static', filename='img/linkedin.png') }}" alt="Access my Linkedin">
-                </a>
-            </div>
+            <p class="social-description">Este é um projeto por Vitor Sampaio. Acesse as redes sociais nos links acima.</p>
         </div>
+        
     </div>
     
     
