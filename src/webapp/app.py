@@ -50,6 +50,8 @@ def index():
 
     # Sort by difference
     df = df[df["Difference%"] > 0].sort_values(by="Difference%", ascending=False)
+    df = df[df["Difference%"] < 32]
+
 
     # Extracting the date from DATE_SCRAPE for the first record (as they should all be the same in this context)
     if len(df) > 0:
