@@ -14,12 +14,12 @@ body {
 /* Hero section */
 .hero {
     display: flex;
-    align-items: center; /* Center vertically */
-    justify-content: space-between;
-    height: 75%; /* Set the height to 75% */
+    align-items: center; 
+    justify-content: space-between; /* This will push main logo to the left and the social logos to the right */
+    height: 75%; 
     padding: 20px;
-    background-color: white; /* Set the background color of the hero to white */
-    color: #016565; /* Set the text color of the hero */
+    background-color: white; 
+    color: #016565; 
 }
 
 .logo {
@@ -82,4 +82,19 @@ body {
 
 .data-table td a:hover {
     text-decoration: underline; /* Underline on hover for a hint that it's clickable */
+}
+
+.github-logo img {
+    width: 48px; /* or whatever desired width */
+    height: auto;
+}
+
+.linkedin-logo img {
+    width: 48px; /* or whatever desired width */
+    height: auto;
+}
+
+.social-logos {
+    display: flex; /* align the LinkedIn and GitHub logos horizontally */
+    gap: 12px; /* space between LinkedIn and GitHub logos */
 }

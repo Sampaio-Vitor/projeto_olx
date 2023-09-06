@@ -12,12 +12,27 @@
 </head>
 <body>
     <div class="hero">
-        <div class="logo">
-            <a href="/">
-                <img src="{{ url_for('static', filename='img/hero_image.png') }}" alt="ApêPrevê Logo">
-            </a>
+        <div class="logo-container">
+            <div class="logo">
+                <a href="/">
+                    <img src="{{ url_for('static', filename='img/hero_image.png') }}" alt="ApêPrevê Logo">
+                </a>
+            </div>
+        </div>
+        <div class="social-logos">
+            <div class="github-logo">
+                <a href="https://github.com/Sampaio-Vitor" target="_blank">
+                    <img src="{{ url_for('static', filename='img/github.png') }}" alt="Access my Github">
+                </a>
+            </div>
+            <div class="linkedin-logo">
+                <a href="https://www.linkedin.com/in/vitorcsampaio/" target="_blank">
+                    <img src="{{ url_for('static', filename='img/linkedin.png') }}" alt="Access my Linkedin">
+                </a>
+            </div>
         </div>
     </div>
+    
     
     <div class="divider"></div> <!-- Thin black line divider -->
     
@@ -25,10 +40,7 @@
         <p class="tagline">Descubra apartamentos anunciados nas últimas 24h que estão quentes em BH 🔥</p>
     </div>
 
-<!-- ... (existing code) ... -->
 
-<!-- Data table -->
-<!-- Data table -->
 <div class="data-table">
     <table>
         <thead>
