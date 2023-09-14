@@ -1,5 +1,5 @@
 # `README.md`
-Acesse o site [apepreve.com](http://apepreve.com) por aqui!
+Acesse o site [apepreve.lat](http://apepreve.lat) por aqui!
 ---
 # INTERFACE DO PROJETO:
 
