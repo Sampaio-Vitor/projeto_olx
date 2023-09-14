@@ -34,7 +34,7 @@ def index():
     df = df[df['DATE_SCRAPE'].dt.normalize().isin([today, yesterday])]
     
     # Filter the DataFrame to only include rows where DATE_SCRAPE is today
-    df = df[df['DATE_SCRAPE'].dt.normalize() == today]
+    #df = df[df['DATE_SCRAPE'].dt.normalize() == today]
     
     # Extract the desired columns
     df = df[["TITLE", "LINK", "DATE_SCRAPE", "NEIGHBORHOOD", "CONDO", "TAX", "AREA", "ROOMS_NO", "BATH_NO", "PARKING_SPOTS", "PRICE", "Predictions"]]
