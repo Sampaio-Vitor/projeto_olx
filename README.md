@@ -1,6 +1,11 @@
 # `README.md`
 Acesse o site [apepreve.lat](http://apepreve.lat) por aqui!
 ---
+
+# VIDEO DE APRESENTAÇÃO:
+[![thumbnail](https://github.com/Sampaio-Vitor/projeto_olx/assets/110466124/d70ee116-6b11-4a74-8cfe-90db932f93b9)](https://www.youtube.com/watch?v=pkYVwhx4e8U)
+
+
 # INTERFACE DO PROJETO:
 
 ![image](https://github.com/Sampaio-Vitor/projeto_olx/assets/110466124/5b214661-82a6-4186-bb91-48fb5c4f33af)
