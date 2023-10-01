@@ -28,7 +28,7 @@ def index():
         
     # Get today's and yesterday's date
     today = pd.Timestamp.now().normalize()
-    yesterday = today - pd.Timedelta(days=5)
+    yesterday = today - pd.Timedelta(days=20)
 
     # Filter the DataFrame to only include rows where DATE_SCRAPE is today or yesterday
     df = df[df['DATE_SCRAPE'].dt.normalize().isin([today, yesterday])]
