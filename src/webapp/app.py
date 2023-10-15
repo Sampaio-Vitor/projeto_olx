@@ -26,15 +26,12 @@ def index():
     # Convert DATE_SCRAPE to datetime format
     df['DATE_SCRAPE'] = pd.to_datetime(df['DATE_SCRAPE'])
         
-    # Get today's and yesterday's date
+    # Get today's date and the date 40 days ago
     today = pd.Timestamp.now().normalize()
-    yesterday = today - pd.Timedelta(days=30)
+    forty_days_ago = today - pd.Timedelta(days=40)
 
-    # Filter the DataFrame to only include rows where DATE_SCRAPE is today or yesterday
-    df = df[df['DATE_SCRAPE'].dt.normalize().isin([today, yesterday])]
-    
-    # Filter the DataFrame to only include rows where DATE_SCRAPE is today
-    #df = df[df['DATE_SCRAPE'].dt.normalize() == today]
+    # Filter the DataFrame to include rows where DATE_SCRAPE is between today and 40 days ago
+    df = df[(df['DATE_SCRAPE'].dt.normalize() >= forty_days_ago) & (df['DATE_SCRAPE'].dt.normalize() <= today)]
     
     # Extract the desired columns
     df = df[["TITLE", "LINK", "DATE_SCRAPE", "NEIGHBORHOOD", "CONDO", "TAX", "AREA", "ROOMS_NO", "BATH_NO", "PARKING_SPOTS", "PRICE", "Predictions"]]
