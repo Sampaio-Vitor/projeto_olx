@@ -28,7 +28,7 @@ def index():
         
     # Get today's date and the date 40 days ago
     today = pd.Timestamp.now().normalize()
-    forty_days_ago = today - pd.Timedelta(days=40)
+    forty_days_ago = today - pd.Timedelta(days=10)
 
     # Filter the DataFrame to include rows where DATE_SCRAPE is between today and 40 days ago
     df = df[(df['DATE_SCRAPE'].dt.normalize() >= forty_days_ago) & (df['DATE_SCRAPE'].dt.normalize() <= today)]
