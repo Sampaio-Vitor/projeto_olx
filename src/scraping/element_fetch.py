@@ -67,7 +67,7 @@ if __name__ == "__main__":
         config = yaml.safe_load(f)
 
     options = Options()
-    options.add_argument("--headless")
+    #options.add_argument("--headless")
     options.add_argument('--ignore-certificate-errors')
     options.add_argument('--ignore-ssl-errors')
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
@@ -76,7 +76,7 @@ if __name__ == "__main__":
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
 
-
+    
     driver = webdriver.Chrome(options=options)
     df = read_from_s3('data/new_links_olx.csv')
     df = df[df['is_new'] == 1]
@@ -97,16 +97,26 @@ if __name__ == "__main__":
         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, 'body')))
         
         price = extract_price_using_xpath(driver)
+        print(price)
         title = extract_title_using_xpath(driver)
         cep = extract_cep(driver)
+        print(cep)
         neighborhood = extract_neighborhood(driver)
+        print(neighborhood)
         condo = extract_condo(driver)
+        print(condo)
         tax = extract_tax(driver)
+        print("tax = " + " " +tax)
         area = extract_area(driver)
+        print(area)
         rooms_no = extract_rooms(driver)
+        print(rooms_no)
         bath_no = extract_baths(driver)
+        print (bath_no)
         parking_spots = extract_parking_spots(driver)
+        print(parking_spots)
         apt_details = extract_apartment_details(driver)
+        print(apt_details)
         region = df[df['link'] == link]['REGION'].iloc[0]
 
         data = {    
