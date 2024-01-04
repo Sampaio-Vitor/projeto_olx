@@ -1,5 +1,7 @@
 # `README.md`
-Acesse o site [apepreve.lat](http://apepreve.lat) por aqui!
+Infelizmente o apepreve foi finalizado em 04/01/2024 😔
+
+Veja o video de apresentação abaixo para entender como funcionava a plataforma!
 ---
 
 # VIDEO DE APRESENTAÇÃO:
@@ -13,7 +15,7 @@ https://www.youtube.com/watch?v=pkYVwhx4e8U
 
 ## **ApêPrevê: Predição de Preços de Imóveis na OLX**
 
-**Status:** 🚧 Em Andamento 🚧
+**Status:** 🚧 Finalizado 🚧
 
 ### **Visão Geral:**
 Este projeto tem como objetivo realizar raspagem de dados (web scraping) diária na OLX, aplicar algoritmos de aprendizado de máquina aos dados coletados e informar ao usuário se, de acordo com as previsões do algoritmo, o preço do anúncio está baixo ou alto. Em resumo, ele ajudará os usuários a identificar se uma negociação de imóvel é vantajosa ou não.
@@ -25,16 +27,6 @@ Este projeto tem como objetivo realizar raspagem de dados (web scraping) diária
 4. **MLOps:** Utilizado Docker em conjunto com Github Actions e ECR para esteira CI/CD. Retreinamento automatico do modelo será implementado, além de atualização diária das métricas em um arquivo MD.
 5. **Interface do Usuário:** Desenvolvida uma interface que fornecerá aos usuários insights sobre o mercado imobiliário, destacando possíveis bons negócios.
 
-### **Próximas implementações:**
-1. Adicionar logging ao código para que tenhamos controle maior sob o que ocorre por trás e registra-los em um arquivo de log;
-2. Adicionar retreinamento do modelo automatico. Serão desenvolvidos mais 2 (pelo menos) modelos de regressão. Baseado no RMSE, o modelo será selecionado a partir do treinamento com os novos dados quinzenalmente. Será implementado teste de hipóteses automático para seleção de modelo ativo.
-3. Reorganizar código removendo partes que possivelmente sejam inuteis.
-4. Criar calculadora que solicitará o usuário os detalhes do apartamento, e através de solicitação API para o modelo treinado, será retornado o valor sugerido para o apartamento.
-5. Criar dashboard dos dados entrantes, com georeferenciamento.
-6. Criar arquivo MD que explica cada função utilizada no código.
-7. Implementar certificado SSL no website.
-8. Salvar os dados em um banco de dados SQL na AWS, invés de CSV no S3.
-
 
 ### **Stack:**
 
@@ -45,12 +37,8 @@ Este projeto tem como objetivo realizar raspagem de dados (web scraping) diária
 - **Frontend:** Painel Web (Flask, HTML e CSS)
 
 
-### **Contribuições:**
-
-Este projeto está na fase ativa de desenvolvimento. Se você está interessado em contribuir ou tem sugestões, crie um problema ou envie um pull request.
-
 ---
 
-*Última Atualização: *06/09/2023*
+*Última Atualização: *04/01/2024*
 
 
